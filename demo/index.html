@@ -3,6 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="light dark" />
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem('mlv-theme');
+    var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (dark) document.documentElement.classList.add('dark');
+    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+  }catch(e){}
+})();
+</script>
 <title>mitlive project catalog</title>
 <meta name="description" content="Projects built by mitlive: networking, connected hardware, healthcare access, accessibility, rural connectivity and community safety." />
 
@@ -10,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='6' y1='0' x2='58' y2='0' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%238134F9'/><stop offset='.45' stop-color='%234174FA'/><stop offset='1' stop-color='%2301D4D4'/></linearGradient></defs><g fill='none' stroke='url(%23g)' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 40 L20 21 L31 42 L44 15'/></g><path d='M58 10 L40 14 L52 26 Z' fill='url(%23g)'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='6' y1='0' x2='58' y2='0' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%238130F1'/><stop offset='.45' stop-color='%234870F3'/><stop offset='1' stop-color='%2310D4D6'/></linearGradient></defs><g fill='none' stroke='url(%23g)' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'><path d='M9 40 L20 21 L31 42 L44 15'/></g><path d='M58 10 L40 14 L52 26 Z' fill='url(%23g)'/></svg>">
 
 <style>
 :root{
@@ -22,15 +33,14 @@
   --ink:#10201E;
   --ink-soft:#4A5C59;
   --line:#DCE4E2;
-  --logo-bg:#FFFFFF;
   --shadow:0 1px 2px rgba(16,32,30,.04), 0 10px 30px rgba(16,32,30,.06);
   --shadow-lift:0 2px 6px rgba(16,32,30,.06), 0 18px 44px rgba(16,32,30,.10);
-  --nav-bg:rgba(245,247,246,.82);
+  --head-shadow:0 1px 0 rgba(16,32,30,.06);
   --r-card:14px;
   --r-pill:999px;
   --ease:cubic-bezier(.22,.61,.36,1);
 }
-body.dark{
+html.dark{
   --teal:#4BC0B4;
   --ember:#F0994A;
   --bg:#0A1615;
@@ -39,20 +49,21 @@ body.dark{
   --ink:#E7EDEB;
   --ink-soft:#93A5A2;
   --line:#1E3230;
-  --logo-bg:#000000;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
   --shadow-lift:0 2px 6px rgba(0,0,0,.45), 0 18px 44px rgba(0,0,0,.5);
-  --nav-bg:rgba(10,22,21,.84);
+  --head-shadow:0 1px 0 rgba(0,0,0,.5);
 }
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background-color:#F5F7F6}
+html.dark{background-color:#0A1615}
 body{
   font-family:'Inter',system-ui,sans-serif;
-  background:var(--bg);color:var(--ink);
+  background-color:#F5F7F6;color:var(--ink);
   min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
-  transition:background-color .45s var(--ease), color .45s var(--ease);
 }
+html.dark body{background-color:#0A1615}
+html.theming *,html.theming *::before,html.theming *::after{transition:none!important}
 h1,h2,h3,.wordmark{font-family:'Manrope',system-ui,sans-serif;letter-spacing:-.02em}
 .mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
 a{color:inherit}
@@ -61,19 +72,16 @@ a{color:inherit}
 
 .site-head{
   position:fixed;inset:0 0 auto 0;z-index:100;
-  background:var(--nav-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:var(--bg);
   border-bottom:1px solid var(--line);
+  box-shadow:var(--head-shadow);
 }
 .site-head .wrap{display:flex;align-items:center;gap:1.1rem;height:70px}
 
 .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;flex:0 0 auto}
-.logo-plate{
-  background:var(--logo-bg);border:1px solid var(--line);
-  border-radius:10px;padding:7px 10px;display:grid;place-items:center;
-  transition:background-color .45s var(--ease), border-color .45s var(--ease);
-}
+.logo-plate{display:grid;place-items:center}
 .logo-plate svg{display:block}
-.brand .logo-plate svg{width:52px;height:29px}
+.brand .logo-plate svg{width:54px;height:29px}
 .wordmark{font-size:1.3rem;font-weight:800;color:var(--ink);line-height:1}
 .wordmark em{font-style:normal;font-weight:400;color:var(--ink-soft)}
 
@@ -87,16 +95,15 @@ a{color:inherit}
 .nav button[aria-current="page"]{color:var(--teal);background:var(--surface-2);font-weight:600}
 
 .icon-btn{
-  width:38px;height:38px;flex:0 0 auto;display:grid;place-items:center;
+  width:38px;height:38px;flex:0 0 auto;display:grid;place-items:center;padding:0;
   background:var(--surface);border:1px solid var(--line);border-radius:var(--r-pill);
   cursor:pointer;color:var(--ink);
   transition:border-color .25s var(--ease), transform .25s var(--ease);
 }
-.icon-btn:hover{border-color:var(--teal);transform:translateY(-1px)}
+.icon-btn:hover{border-color:var(--teal);transform:translateY(-1px);background:var(--surface)}
 .icon-btn svg{width:17px;height:17px}
-.menu-btn{display:none;margin-left:auto}
 
-main{padding:calc(70px + 3.5rem) 0 4rem}
+main{padding:calc(70px + 3.5rem) 0 4rem;background-color:inherit}
 .page{display:none}
 .page.on{display:block;animation:pageIn .4s var(--ease) both}
 @keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -154,12 +161,14 @@ main{padding:calc(70px + 3.5rem) 0 4rem}
 .arrow svg{width:16px;height:16px}
 .arrow.prev{left:-14px}
 .arrow.next{right:-14px}
-@media(max-width:1240px){.arrow.prev{left:2px}.arrow.next{right:2px}}
+@media(max-width:1260px){.arrow{display:none}}
 
 .dots{display:flex;justify-content:center;gap:.45rem;margin-top:1.6rem;flex-wrap:wrap}
-.dot{width:8px;height:8px;padding:0;border:0;border-radius:50%;cursor:pointer;
+.dot{width:9px;height:9px;padding:0;border:0;border-radius:50%;cursor:pointer;
   background:var(--line);transition:background-color .3s var(--ease), width .3s var(--ease)}
-.dot[aria-current="true"]{background:var(--teal);width:24px;border-radius:4px}
+.dot[aria-current="true"]{background:var(--teal);width:26px;border-radius:5px}
+.swipe-hint{margin-top:.9rem;text-align:center;font:500 .76rem/1 'IBM Plex Mono',monospace;color:var(--ink-soft);display:none}
+@media(max-width:1260px){.swipe-hint{display:block}}
 
 .about{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:2.75rem;align-items:start}
 @media(max-width:820px){.about{grid-template-columns:1fr;gap:2rem}}
@@ -167,7 +176,7 @@ main{padding:calc(70px + 3.5rem) 0 4rem}
   background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
   padding:2rem;display:grid;place-items:center;box-shadow:var(--shadow)
 }
-.about-mark .logo-plate{padding:1.6rem 1.4rem;width:100%}
+.about-mark .logo-plate{width:100%}
 .about-mark .logo-plate svg{width:100%;height:auto;max-width:210px}
 .about-text h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:700;margin-bottom:1.1rem}
 .about-text p{color:var(--ink-soft);line-height:1.75;margin-bottom:1rem;max-width:64ch}
@@ -203,12 +212,32 @@ main{padding:calc(70px + 3.5rem) 0 4rem}
 .btn{font:600 .92rem/1 'Inter',sans-serif;color:#fff;background:var(--teal);border:0;
   border-radius:9px;padding:.8rem 1.4rem;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;
   transition:filter .25s var(--ease), transform .25s var(--ease)}
-body.dark .btn{color:#06100F}
+html.dark .btn{color:#06100F}
 .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
 .btn svg{width:15px;height:15px}
 .status{margin-top:1rem;font-size:.87rem;line-height:1.55;color:var(--ink-soft);display:none}
 .status.on{display:block}
 .status b{color:var(--ink);font-weight:600}
+
+.tabbar{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:110;
+  background-color:#F5F7F6;border-top:1px solid var(--line);
+  padding:.35rem .25rem calc(.35rem + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -1px 0 rgba(16,32,30,.06);
+}
+html.dark .tabbar{background-color:#0A1615;box-shadow:0 -1px 0 rgba(0,0,0,.5)}
+.tabbar button{
+  flex:1 1 0;min-width:0;background:none;border:0;cursor:pointer;padding:.4rem .15rem .3rem;
+  display:flex;flex-direction:column;align-items:center;gap:.22rem;
+  color:var(--ink-soft);border-radius:12px;
+  font:500 .66rem/1 'Inter',sans-serif;letter-spacing:.01em;
+}
+.tabbar button svg{width:22px;height:22px;display:block}
+.tabbar button span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tabbar button[aria-current="page"]{color:var(--teal)}
+.tabbar button[aria-current="page"] .tab-ico{background:color-mix(in srgb,var(--teal) 13%,transparent)}
+.tab-ico{display:grid;place-items:center;width:44px;height:26px;border-radius:999px}
+.tabbar .tab-mark svg{width:30px;height:17px}
 
 .site-foot{border-top:1px solid var(--line);padding:1.75rem 0;text-align:center}
 .site-foot p{font-size:.83rem;color:var(--ink-soft)}
@@ -244,13 +273,11 @@ body.dark .btn{color:#06100F}
 }
 
 @media(max-width:760px){
-  .menu-btn{display:grid}
-  .nav{position:absolute;top:70px;left:0;right:0;flex-direction:column;align-items:stretch;
-    gap:.15rem;background:var(--surface);border-bottom:1px solid var(--line);
-    padding:.6rem 1.5rem 1rem;margin-left:0;display:none}
-  .nav.open{display:flex}
-  .nav button{text-align:left;padding:.75rem .6rem}
-  main{padding-top:calc(70px + 2.25rem)}
+  .nav{display:none}
+  .tabbar{display:flex}
+  main{padding:calc(64px + 2rem) 0 calc(72px + env(safe-area-inset-bottom,0px) + 1.5rem)}
+  .site-head .wrap{height:64px}
+  .site-head{box-shadow:none}
 }
 </style>
 </head>
@@ -260,27 +287,25 @@ body.dark .btn{color:#06100F}
   <div class="wrap">
     <a class="brand" href="#" data-nav="projects" aria-label="mitlive, projects">
       <span class="logo-plate">
-        <svg viewBox="14 26 358 198" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <svg viewBox="0 0 549 292" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
-            <linearGradient id="arrowA" x1="29" y1="0" x2="357" y2="0" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stop-color="#8134F9"/>
-              <stop offset="0.12" stop-color="#7A3AFC"/>
-              <stop offset="0.25" stop-color="#674AFA"/>
-              <stop offset="0.35" stop-color="#545DFA"/>
-              <stop offset="0.43" stop-color="#4174FA"/>
-              <stop offset="0.50" stop-color="#2CA0C6"/>
-              <stop offset="0.57" stop-color="#19C389"/>
-              <stop offset="0.66" stop-color="#16C394"/>
-              <stop offset="0.75" stop-color="#11BEBA"/>
-              <stop offset="0.85" stop-color="#08C9D1"/>
-              <stop offset="1" stop-color="#01D4D4"/>
+            <linearGradient id="markA" x1="3.5" y1="0" x2="545.5" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#8130F1"/>
+              <stop offset="0.15" stop-color="#7444F1"/>
+              <stop offset="0.25" stop-color="#684BF0"/>
+              <stop offset="0.35" stop-color="#585FF1"/>
+              <stop offset="0.42" stop-color="#4870F3"/>
+              <stop offset="0.48" stop-color="#4089DD"/>
+              <stop offset="0.54" stop-color="#2EB4A2"/>
+              <stop offset="0.60" stop-color="#26C683"/>
+              <stop offset="0.70" stop-color="#24C0A5"/>
+              <stop offset="0.80" stop-color="#1CC0C5"/>
+              <stop offset="0.90" stop-color="#14CCD2"/>
+              <stop offset="1" stop-color="#10D4D6"/>
             </linearGradient>
           </defs>
-          <circle cx="42" cy="152" r="13" fill="url(#arrowA)"/>
-          <path d="M42 152 L86 152 L98 137 L121 177 L165 96 L222 195 L325 76"
-                fill="none" stroke="url(#arrowA)" stroke-width="16"
-                stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M357 39 L304 52 Q336 72 348 93 Z" fill="url(#arrowA)"/>
+          <path d="M544 8.8 L541.5 6 L536 6.2 L471.5 26 L467.2 28.4 L466 30.7 L466.9 33.8 L478.1 43 L478.4 46.5 L476.8 50 L329.8 226.5 L324 231.2 L321.1 231.2 L318.5 229.2 L305.8 208.6 L298.4 194.5 L296 187.5 L242.3 86.5 L236.4 79.7 L228.5 76.8 L224 77 L219 79 L212.3 86.5 L162.4 199.5 L158.8 204 L155.7 204 L152.9 200.9 L133.7 160.1 L128.4 155.4 L122 153.7 L117 154.4 L112.6 156.8 L94.8 175.3 L86.5 179.7 L46 179.9 L29.5 172.4 L23.5 171.7 L17.5 172.9 L11.4 176.7 L6.6 183 L4.4 191 L5.4 198.5 L8.2 203.9 L13.1 208.9 L19 211.9 L25 212.6 L31 211.5 L41 206.1 L46 204.6 L99 204.2 L104.8 201.4 L113.6 193.3 L118 192.5 L122.2 197 L146.3 249.4 L153.5 255.3 L158 256.2 L163 255.5 L168.1 252.7 L172.5 247 L222.3 136 L225 132.4 L228.2 131.7 L232.5 136 L303.5 276 L308.1 281.5 L314 285 L320.5 286.2 L327.5 285.1 L333.4 281.8 L339.8 275.5 L506 80.2 L509.6 77.8 L512.7 77.8 L523.1 87.9 L526.2 88.6 L528.4 87 L530.3 82.5 L544.1 13.5 Z"
+                fill="url(#markA)" stroke="url(#markA)" stroke-width="5" stroke-linejoin="round"/>
         </svg>
       </span>
       <span class="wordmark">mit<em>live</em></span>
@@ -291,14 +316,8 @@ body.dark .btn{color:#06100F}
       <button data-nav="about">About</button>
       <button data-nav="connect">Connect</button>
       <button data-nav="report">Report</button>
-      <button class="icon-btn" id="themeBtn" aria-label="Switch to dark theme"></button>
+      <button class="icon-btn js-theme" id="themeBtn" aria-label="Switch to dark theme"></button>
     </nav>
-
-    <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M4 7h16M4 12h16M4 17h16"/>
-      </svg>
-    </button>
   </div>
 </header>
 
@@ -324,6 +343,7 @@ body.dark .btn{color:#06100F}
         </button>
       </div>
       <div class="dots" id="dots"></div>
+      <p class="swipe-hint">swipe to browse</p>
     </div>
   </section>
 
@@ -332,27 +352,25 @@ body.dark .btn{color:#06100F}
       <div class="about">
         <div class="about-mark">
           <span class="logo-plate">
-            <svg viewBox="14 26 358 198" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <svg viewBox="0 0 549 292" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <defs>
-                <linearGradient id="arrowB" x1="29" y1="0" x2="357" y2="0" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stop-color="#8134F9"/>
-                  <stop offset="0.12" stop-color="#7A3AFC"/>
-                  <stop offset="0.25" stop-color="#674AFA"/>
-                  <stop offset="0.35" stop-color="#545DFA"/>
-                  <stop offset="0.43" stop-color="#4174FA"/>
-                  <stop offset="0.50" stop-color="#2CA0C6"/>
-                  <stop offset="0.57" stop-color="#19C389"/>
-                  <stop offset="0.66" stop-color="#16C394"/>
-                  <stop offset="0.75" stop-color="#11BEBA"/>
-                  <stop offset="0.85" stop-color="#08C9D1"/>
-                  <stop offset="1" stop-color="#01D4D4"/>
+                <linearGradient id="markB" x1="3.5" y1="0" x2="545.5" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#8130F1"/>
+                  <stop offset="0.15" stop-color="#7444F1"/>
+                  <stop offset="0.25" stop-color="#684BF0"/>
+                  <stop offset="0.35" stop-color="#585FF1"/>
+                  <stop offset="0.42" stop-color="#4870F3"/>
+                  <stop offset="0.48" stop-color="#4089DD"/>
+                  <stop offset="0.54" stop-color="#2EB4A2"/>
+                  <stop offset="0.60" stop-color="#26C683"/>
+                  <stop offset="0.70" stop-color="#24C0A5"/>
+                  <stop offset="0.80" stop-color="#1CC0C5"/>
+                  <stop offset="0.90" stop-color="#14CCD2"/>
+                  <stop offset="1" stop-color="#10D4D6"/>
                 </linearGradient>
               </defs>
-              <circle cx="42" cy="152" r="13" fill="url(#arrowB)"/>
-              <path d="M42 152 L86 152 L98 137 L121 177 L165 96 L222 195 L325 76"
-                    fill="none" stroke="url(#arrowB)" stroke-width="16"
-                    stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M357 39 L304 52 Q336 72 348 93 Z" fill="url(#arrowB)"/>
+              <path d="M544 8.8 L541.5 6 L536 6.2 L471.5 26 L467.2 28.4 L466 30.7 L466.9 33.8 L478.1 43 L478.4 46.5 L476.8 50 L329.8 226.5 L324 231.2 L321.1 231.2 L318.5 229.2 L305.8 208.6 L298.4 194.5 L296 187.5 L242.3 86.5 L236.4 79.7 L228.5 76.8 L224 77 L219 79 L212.3 86.5 L162.4 199.5 L158.8 204 L155.7 204 L152.9 200.9 L133.7 160.1 L128.4 155.4 L122 153.7 L117 154.4 L112.6 156.8 L94.8 175.3 L86.5 179.7 L46 179.9 L29.5 172.4 L23.5 171.7 L17.5 172.9 L11.4 176.7 L6.6 183 L4.4 191 L5.4 198.5 L8.2 203.9 L13.1 208.9 L19 211.9 L25 212.6 L31 211.5 L41 206.1 L46 204.6 L99 204.2 L104.8 201.4 L113.6 193.3 L118 192.5 L122.2 197 L146.3 249.4 L153.5 255.3 L158 256.2 L163 255.5 L168.1 252.7 L172.5 247 L222.3 136 L225 132.4 L228.2 131.7 L232.5 136 L303.5 276 L308.1 281.5 L314 285 L320.5 286.2 L327.5 285.1 L333.4 281.8 L339.8 275.5 L506 80.2 L509.6 77.8 L512.7 77.8 L523.1 87.9 L526.2 88.6 L528.4 87 L530.3 82.5 L544.1 13.5 Z"
+                    fill="url(#markB)" stroke="url(#markB)" stroke-width="5" stroke-linejoin="round"/>
             </svg>
           </span>
         </div>
@@ -417,6 +435,34 @@ body.dark .btn{color:#06100F}
 
 </main>
 
+<nav class="tabbar" id="tabbar" aria-label="Sections">
+  <button data-nav="projects" aria-current="page">
+    <span class="tab-ico tab-mark">
+      <svg viewBox="0 0 549 292" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="markC" x1="3.5" y1="0" x2="545.5" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8130F1"/><stop offset="0.15" stop-color="#7444F1"/><stop offset="0.25" stop-color="#684BF0"/><stop offset="0.35" stop-color="#585FF1"/><stop offset="0.42" stop-color="#4870F3"/><stop offset="0.48" stop-color="#4089DD"/><stop offset="0.54" stop-color="#2EB4A2"/><stop offset="0.6" stop-color="#26C683"/><stop offset="0.7" stop-color="#24C0A5"/><stop offset="0.8" stop-color="#1CC0C5"/><stop offset="0.9" stop-color="#14CCD2"/><stop offset="1" stop-color="#10D4D6"/></linearGradient></defs>
+        <path d="M544 8.8 L541.5 6 L536 6.2 L471.5 26 L467.2 28.4 L466 30.7 L466.9 33.8 L478.1 43 L478.4 46.5 L476.8 50 L329.8 226.5 L324 231.2 L321.1 231.2 L318.5 229.2 L305.8 208.6 L298.4 194.5 L296 187.5 L242.3 86.5 L236.4 79.7 L228.5 76.8 L224 77 L219 79 L212.3 86.5 L162.4 199.5 L158.8 204 L155.7 204 L152.9 200.9 L133.7 160.1 L128.4 155.4 L122 153.7 L117 154.4 L112.6 156.8 L94.8 175.3 L86.5 179.7 L46 179.9 L29.5 172.4 L23.5 171.7 L17.5 172.9 L11.4 176.7 L6.6 183 L4.4 191 L5.4 198.5 L8.2 203.9 L13.1 208.9 L19 211.9 L25 212.6 L31 211.5 L41 206.1 L46 204.6 L99 204.2 L104.8 201.4 L113.6 193.3 L118 192.5 L122.2 197 L146.3 249.4 L153.5 255.3 L158 256.2 L163 255.5 L168.1 252.7 L172.5 247 L222.3 136 L225 132.4 L228.2 131.7 L232.5 136 L303.5 276 L308.1 281.5 L314 285 L320.5 286.2 L327.5 285.1 L333.4 281.8 L339.8 275.5 L506 80.2 L509.6 77.8 L512.7 77.8 L523.1 87.9 L526.2 88.6 L528.4 87 L530.3 82.5 L544.1 13.5 Z" fill="url(#markC)" stroke="url(#markC)" stroke-width="5" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span>Projects</span>
+  </button>
+  <button data-nav="about">
+    <span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.1"/></svg></span>
+    <span>About</span>
+  </button>
+  <button data-nav="connect">
+    <span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.2 13.8a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.3 1.3"/><path d="M13.8 10.2a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.3-1.3"/></svg></span>
+    <span>Connect</span>
+  </button>
+  <button data-nav="report">
+    <span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 21V4.2"/><path d="M5.5 5h11.2l-1.9 3.6 1.9 3.6H5.5"/></svg></span>
+    <span>Report</span>
+  </button>
+  <button class="js-theme" id="themeTab" aria-label="Switch theme">
+    <span class="tab-ico js-theme-ico"></span>
+    <span>Theme</span>
+  </button>
+</nav>
+
 <footer class="site-foot">
   <div class="wrap"><p><span class="mono">mitlive</span> project catalog</p></div>
 </footer>
@@ -427,6 +473,7 @@ body.dark .btn{color:#06100F}
 
 const AUTOROTATE_MS = 5500;
 const REPORT_ENDPOINT = null;
+const REPORT_EMAIL = 'mmfrigillana.academe@gmail.com';
 
 const projects = [
   {
@@ -530,13 +577,7 @@ const projects = [
 const links = [
   { name: "Contact", icon: 'mail', url: "https://mfrigillana.github.io/#contact", note: "Get in touch directly." },
   { name: "GitHub", icon: 'github', url: "https://github.com/mitlive", note: "Repos and open-source work." },
-  { name: "LinkedIn", icon: 'linkedin', url: "https://linkedin.com/company/mitlive", note: "Professional updates." },
-  { name: "Telegram", icon: 'telegram', url: "https://t.me/mitlive", note: "Direct messages." },
-  { name: "Fiverr", icon: 'Fv', url: "https://www.fiverr.com/mitlive", note: "Services and commissions." },
-  { name: "PayPal", icon: 'Pp', url: "https://paypal.me/mitlive", note: "Support the work." },
-  { name: "About.me", icon: 'person', url: "https://about.me/mitlive", note: "The short version." },
-  { name: "PMI", icon: 'PM', url: "https://www.projectmanagement.com/profile/mitlive", note: "Project management writing." },
-  { name: "Hugging Face", icon: 'HF', url: "https://huggingface.co/mitlive", note: "Models and datasets." }
+  { name: "About.me", icon: 'person', url: "https://about.me/mfrigillana", note: "The short version." }
 ];
 
 const S = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
@@ -545,8 +586,6 @@ const S = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 const icons = {
   mail: S('<rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6.5l9 6.5 9-6.5"/>'),
   github: S('<path d="M9 19c-4.5 1.5-4.5-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.3 4.3 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>'),
-  linkedin: S('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V17M8 7.4v.1M12.5 17v-3.6c0-1.1.8-1.9 1.8-1.9s1.7.8 1.7 1.9V17M12.5 10.5V17"/>'),
-  telegram: S('<path d="M21.5 4.3 2.9 11.4c-.8.3-.8 1.4 0 1.7l4.6 1.5 1.8 5c.3.8 1.3.9 1.8.3l2.3-2.6 4.6 3.4c.6.4 1.5.1 1.7-.7l3-14.5c.2-.8-.6-1.5-1.2-1.2Z"/><path d="M7.5 14.6 18.4 6.9"/>'),
   person: S('<circle cx="12" cy="8.5" r="3.5"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>')
 };
 
@@ -717,9 +756,8 @@ const dotsBox = document.getElementById('dots');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const linkGrid = document.getElementById('linkGrid');
-const themeBtn = document.getElementById('themeBtn');
-const menuBtn = document.getElementById('menuBtn');
-const nav = document.getElementById('nav');
+const themeBtns = document.querySelectorAll('.js-theme');
+const root = document.documentElement;
 
 const store = {
   get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
@@ -730,37 +768,41 @@ const sunIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 const moonIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>';
 
 function applyTheme(dark){
-  document.body.classList.toggle('dark', dark);
-  themeBtn.innerHTML = dark ? sunIcon : moonIcon;
-  themeBtn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+  root.classList.add('theming');
+  root.classList.toggle('dark', dark);
+  const label = dark ? 'Switch to light theme' : 'Switch to dark theme';
+  themeBtns.forEach(b => {
+    const slot = b.querySelector('.js-theme-ico') || b;
+    slot.innerHTML = dark ? sunIcon : moonIcon;
+    b.setAttribute('aria-label', label);
+  });
+  root.style.colorScheme = dark ? 'dark' : 'light';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => root.classList.remove('theming'));
+  });
 }
 
-applyTheme(store.get('mlv-theme') === 'dark');
+const saved = store.get('mlv-theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+applyTheme(saved ? saved === 'dark' : prefersDark);
 
-themeBtn.addEventListener('click', () => {
-  const dark = !document.body.classList.contains('dark');
+themeBtns.forEach(b => b.addEventListener('click', () => {
+  const dark = !root.classList.contains('dark');
   applyTheme(dark);
   store.set('mlv-theme', dark ? 'dark' : 'light');
-});
+}));
 
 function goTo(id){
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('on', p.id === id));
-  document.querySelectorAll('.nav button[data-nav]').forEach(b => {
+  document.querySelectorAll('.nav button[data-nav], .tabbar button[data-nav]').forEach(b => {
     if (b.dataset.nav === id) b.setAttribute('aria-current','page');
     else b.removeAttribute('aria-current');
   });
-  nav.classList.remove('open');
-  menuBtn.setAttribute('aria-expanded','false');
   window.scrollTo({ top:0, behavior:'smooth' });
 }
 
 document.querySelectorAll('[data-nav]').forEach(el => {
   el.addEventListener('click', e => { e.preventDefault(); goTo(el.dataset.nav); });
-});
-
-menuBtn.addEventListener('click', () => {
-  const open = nav.classList.toggle('open');
-  menuBtn.setAttribute('aria-expanded', String(open));
 });
 
 function renderProjects(){
@@ -873,7 +915,14 @@ form.addEventListener('submit', async e => {
   }
 
   if (!REPORT_ENDPOINT){
-    status.innerHTML = '<b>Not connected yet.</b> This form has no destination set, so nothing was sent. Use a link on the Connect page in the meantime.';
+    if (!REPORT_EMAIL){
+      status.innerHTML = '<b>Not connected yet.</b> This form has no destination set. Use a link on the Connect page in the meantime.';
+      return;
+    }
+    const subject = encodeURIComponent('Report from ' + name);
+    const body = encodeURIComponent(msg + '\n\nFrom: ' + name + '\nReply to: ' + email);
+    window.location.href = 'mailto:' + REPORT_EMAIL + '?subject=' + subject + '&body=' + body;
+    status.innerHTML = '<b>Your email app is opening.</b> Hit send there and the report reaches us.';
     return;
   }
 
